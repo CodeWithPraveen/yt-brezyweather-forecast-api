@@ -31,13 +31,19 @@ The Code with Praveen video "Run Agents in Parallel in Claude Code" walks throug
 List the background sessions the demo started, with their IDs:
 
 ```bash
-claude agents --json --all
+claude agents --json --all --cwd "$PWD"
 ```
 
-Delete each session and its worktree, replacing `<id>` with a session ID from the list:
+`--cwd` limits the list to sessions started in this folder, so you don't delete work from other projects. Delete each session with `"kind": "background"` and its worktree, replacing `<id>` with its `id`:
 
 ```bash
 claude rm <id>
+```
+
+Each session committed its fix in its worktree, and those commits were never pushed, so `claude rm` stops and prints a `--discard-unpushed` value instead of deleting. To throw the demo fixes away, run it again with that value:
+
+```bash
+claude rm <id> --discard-unpushed <value>
 ```
 
 If `git branch` still lists `worktree-…` branches afterwards, delete each one:
